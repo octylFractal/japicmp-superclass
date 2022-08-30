@@ -1,0 +1,17 @@
+plugins {
+    id 'me.champeau.gradle.japicmp' version '0.4.0'
+}
+
+repositories { mavenCentral() }
+
+tasks.register("japicmp", me.champeau.gradle.japicmp.JapicmpTask) {
+    oldClasspath.from(project(":old").tasks.named("jar"))
+    newClasspath.from(project(":new").tasks.named("jar"))
+    onlyModified = true
+    failOnModification = true
+    richReport {
+                destinationDir = file("$buildDir/reports/binary-compatibility")
+        reportName = "report.html"
+        addDefaultRules = true
+    }
+}
